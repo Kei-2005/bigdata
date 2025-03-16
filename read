@@ -1,0 +1,51 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import os
+
+ruta = "C:\\READ"
+
+
+archivos = [
+    "ventasmenor_municipios top10.csv",
+    "ventas_departamento top10.csv",
+    "ventas_municipios top15.csv",
+    "ventas_productos top 15.csv"
+]
+
+
+for archivo in archivos:
+    ruta_completa = os.path.join(ruta, archivo)
+    
+    
+    df = pd.read_csv(ruta_completa)
+    
+    
+    if "producto" in df.columns:
+        titulo = "Top 15 Productos más vendidos"
+        x_col = "producto"
+        y_col = "total_ventas"
+    elif "nombre_departamento" in df.columns:
+        titulo = "Top 10 Departamentos con más ventas"
+        x_col = "nombre_departamento"
+        y_col = "total_ventas"
+    else:
+        titulo = f"Top {len(df)} Municipios con más ventas"
+        x_col = "municipio"
+        y_col = "total_ventas"
+    
+    
+    plt.figure(figsize=(10, 5))
+    plt.bar(df[x_col], df[y_col], color='skyblue')
+    plt.xlabel(x_col)
+    plt.ylabel(y_col)
+    plt.title(titulo)
+    plt.xticks(rotation=45, ha="right")
+    
+    
+    imagen_nombre = archivo.replace(".csv", ".png")
+    plt.savefig(os.path.join(ruta, imagen_nombre), bbox_inches="tight")
+    
+   
+    plt.show()
+
+print("Gráficos generados y guardados en", ruta)
